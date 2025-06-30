@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Foco Total{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Foco Total</h1>
+        <nav>
+            <a href="{% url 'index' %}">Início</a> |
+            <a href="{% url 'pomodoro' %}">Pomodoro</a> |
+            <a href="{% url 'cronograma' %}">Cronograma</a>
+            <a href="{% url 'criar_cronograma' %}">+ Novo Horário</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
