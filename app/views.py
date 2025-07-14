@@ -1,9 +1,8 @@
-# views.py
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Dica, Cronograma
+from .models import Dica, Cronograma, MaterialApoio
 from .forms import CronogramaForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -11,7 +10,8 @@ from django.urls import reverse_lazy
 class IndexView(View):
     def get(self, request):
         dicas = Dica.objects.all()
-        return render(request, 'index.html', {'dicas': dicas})
+        materiais = MaterialApoio.objects.all()
+        return render(request, 'index.html', {'dicas': dicas, 'materiais': materiais})
 
 @method_decorator(login_required, name='dispatch')
 class PomodoroView(View):
@@ -45,5 +45,3 @@ class CustomLoginView(LoginView):
 
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('login')
-
-

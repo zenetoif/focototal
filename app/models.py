@@ -1,4 +1,3 @@
-# models.py
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -38,7 +37,6 @@ class Recompensa(models.Model):
     def __str__(self):
         return self.titulo
 
-
 class SessaoPomodoro(models.Model):
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
     data = models.DateField(auto_now_add=True)
@@ -51,6 +49,17 @@ class SessaoPomodoro(models.Model):
 class Dica(models.Model):
     titulo = models.CharField(max_length=100)
     conteudo = models.TextField()
+
+    def __str__(self):
+        return self.titulo
+
+# --- NOVO model para materiais de apoio ---
+
+class MaterialApoio(models.Model):
+    titulo = models.CharField(max_length=200)
+    descricao = models.TextField(blank=True)
+    link = models.URLField()
+    imagem = models.URLField(blank=True)
 
     def __str__(self):
         return self.titulo

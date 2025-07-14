@@ -1,14 +1,12 @@
-from django.contrib import admin
-from django.urls import path, include
-from app.views import (
+from django.urls import path
+from .views import (
     IndexView, PomodoroView, CronogramaView, CriarCronogramaView,
     CustomLoginView, CustomLogoutView
 )
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('app.urls')), 
+app_name = 'app'  # Útil para usar {% url 'app:index' %}, etc.
 
+urlpatterns = [
     # Página inicial
     path('', IndexView.as_view(), name='index'),
 
@@ -17,7 +15,7 @@ urlpatterns = [
 
     # Cronograma
     path('cronograma/', CronogramaView.as_view(), name='cronograma'),
-    path('cronograma/criar/', CriarCronogramaView.as_view(), name='criar_cronograma'),
+    path('cronograma/novo/', CriarCronogramaView.as_view(), name='criar_cronograma'),
 
     # Autenticação
     path('login/', CustomLoginView.as_view(), name='login'),
