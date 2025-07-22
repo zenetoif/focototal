@@ -4,12 +4,13 @@ from pathlib import Path
 # Diretório base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Chave secreta (não compartilhe publicamente em produção)
+# Chave secreta (não compartilhe em produção)
 SECRET_KEY = 'django-insecure-8l8o(-2su$6t%k424293i#x672q0$*^itfyi9r32$8j-igo7zf'
 
-# Ativar modo debug para desenvolvimento
+# DEBUG ativado para desenvolvimento
 DEBUG = True
 
+# Permitir hosts locais
 ALLOWED_HOSTS = []
 
 # Aplicações instaladas
@@ -20,7 +21,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',  # sua aplicação principal
+
+    'app.apps.AppConfig',  # <-- use o AppConfig para ativar signals
 ]
 
 # Middlewares
@@ -34,10 +36,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Arquivo de URL principal
+# Arquivo de URLs principal
 ROOT_URLCONF = 'config.urls'
 
-# Configuração de templates
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -46,7 +48,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',  # importante para o login funcionar
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -54,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-# Configuração WSGI
+# WSGI
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Banco de dados PostgreSQL
@@ -63,7 +65,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'focototal2025h',
         'USER': 'postgres',
-        'PASSWORD': '123456',
+        'PASSWORD': 'senha123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -71,18 +73,10 @@ DATABASES = {
 
 # Validação de senha
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internacionalização
@@ -94,7 +88,12 @@ USE_TZ = True
 # Arquivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "app/static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # Para coletar arquivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Campo padrão para chaves primárias
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configurações para autenticação
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'   # após login, redireciona para dashboard ou home
+LOGOUT_REDIRECT_URL = '/login/'  # após logout, vai para a página de login

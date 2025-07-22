@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+  <h1 class="text-center mb-4 text-success fw-bold">🎉 Página de Recompensas 🎉</h1>
+
+  {% if recompensas %}
+    <p class="text-center mb-5 fs-5">
+      Parabéns por se dedicar! Aqui estão suas recompensas exclusivas para motivar seus estudos.
+    </p>
+
+    <div class="row g-4 justify-content-center">
+      {% for recompensa in recompensas %}
+        <div class="col-md-4">
+          <div class="card shadow-sm border-success h-100">
+            <div class="card-body text-center">
+              <div class="display-1 text-success mb-3">🏆</div>
+              <h5 class="card-title fw-bold">{{ recompensa.titulo }}</h5>
+              <p class="card-text">{{ recompensa.descricao }}</p>
+              <button class="btn btn-success btn-sm">Resgatar</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <p class="text-center fs-5 text-warning">Você ainda não tem recompensas. Continue estudando para ganhar!</p>
+  {% endif %}
+
+  <div class="text-center mt-5">
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-success">Voltar ao Dashboard</a>
+  </div>
+</div>
+{% endblock %}

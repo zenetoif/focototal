@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Central de Estudos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f8fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .section-title {
+      margin-top: 50px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    .card-custom {
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .card-custom:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .btn-outline-primary {
+      border-radius: 30px;
+    }
+    .cronograma-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .cronograma-card li::before {
+      content: "📅 ";
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-5">
+
+  <!-- DICAS -->
+  <h2 class="section-title text-center">💡 Dicas de Estudo</h2>
+  <div class="row">
+    {% for dica in dicas %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card card-custom bg-info bg-opacity-25 p-3">
+          <h5 class="card-title text-info">{{ dica.titulo }}</h5>
+          <p class="card-text">{{ dica.conteudo }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted text-center">Sem dicas disponíveis.</p>
+    {% endfor %}
+  </div>
+
+  <!-- MATERIAIS DE APOIO -->
+  <h2 class="section-title text-center">📚 Materiais de Apoio</h2>
+  <div class="row">
+    {% for mat in materiais %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card card-custom bg-success bg-opacity-25 p-3">
+          <h5 class="card-title text-success">{{ mat.titulo }}</h5>
+          <a href="{{ mat.link }}" target="_blank" class="btn btn-outline-success mt-2">Acessar Material</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted text-center">Sem materiais disponíveis.</p>
+    {% endfor %}
+  </div>
+
+  <!-- CRONOGRAMAS PRONTOS -->
+  <h2 class="section-title text-center">🗓️ Cronogramas Sugeridos</h2>
+  <div class="row">
+    {% for crono in cronogramas %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card card-custom cronograma-card bg-warning bg-opacity-25 p-3">
+          <h5 class="card-title text-warning">{{ crono.nome }}</h5>
+          <ul>
+            {% for tarefa in crono.tarefas %}
+              <li>{{ tarefa.dia }} - {{ tarefa.atividade }}</li>
+            {% endfor %}
+          </ul>
+          <a href="{% url 'cronograma_detalhes' crono.id %}" class="btn btn-outline-warning mt-2">Ver Cronograma</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted text-center">Nenhum cronograma sugerido disponível.</p>
+    {% endfor %}
+  </div>
+
+  <!-- BOTÃO DE CRIAÇÃO DE CRONOGRAMA -->
+  <div class="text-center mt-5">
+    <a href="{% url 'criar_cronograma' %}" class="btn btn-primary btn-lg">
+      ✏️ Criar Meu Próprio Cronograma
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>

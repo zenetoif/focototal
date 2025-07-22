@@ -1,73 +1,189 @@
-{% extends "base.html" %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Foco Total - Página Inicial</title>
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Seu CSS personalizado */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+      color: #2e7d32;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      margin-top: 20px;
+    }
+    h1, h2 {
+      color: #2e7d32;
+    }
+    button {
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1b5e20;
+    }
 
-{% block content %}
-<div class="text-center mb-4">
-  <h2 class="fw-bold">Foco Total</h2>
-  <p class="lead">Aplicação para apoio à concentração nos estudos</p>
-</div>
+    /* Cards Bootstrap customizados */
+    .hover-card:hover {
+      box-shadow: 0 0 15px rgba(46, 125, 50, 0.6);
+      transform: translateY(-5px);
+      transition: all 0.3s ease;
+    }
+    .card {
+      background: #dcedc8;
+      border: none;
+      border-radius: 15px;
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: contain;
+      padding: 20px;
+      filter: drop-shadow(0 0 5px rgba(46,125,50,0.7));
+    }
+    a.btn-primary {
+      background: #2e7d32;
+      border: none;
+    }
+    a.btn-primary:hover {
+      background: #1b5e20;
+    }
+    .list-group-item {
+      background: #e6ee9c;
+      border: none;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #2e7d32;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
 
-<div class="alert alert-success text-center">
-  Bem-vindo(a), {{ user.first_name }}!
-</div>
+  <header>
+    Foco Total - Apoio à Concentração nos Estudos
+  </header>
 
-<div class="row justify-content-center g-4">
+  <main class="container py-5 text-center">
+    <h1 class="display-4 mb-3">Bem-vindo ao Foco Total</h1>
+    <p class="lead mb-4">Aplicação para apoio à concentração nos estudos.</p>
 
-  <!-- Pomodoro -->
-  <div class="col-md-4">
-    <div class="card hover-card h-100">
-      <img src="{% static 'img/pomodoro.png' %}" class="card-img-top" alt="Pomodoro">
-      <div class="card-body text-center">
-        <h5 class="card-title">Sessão Pomodoro</h5>
-        <a href="{% url 'app:pomodoro' %}" class="btn btn-primary">Iniciar</a>
+    <div class="row justify-content-center g-4">
+
+      <!-- Pomodoro -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm hover-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/2920/2920212.png" 
+               alt="Pomodoro" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Sessão Pomodoro</h5>
+            <button>Iniciar</button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Cronograma -->
-  <div class="col-md-4">
-    <div class="card hover-card h-100">
-      <img src="{% static 'img/cronograma.png' %}" class="card-img-top" alt="Cronograma">
-      <div class="card-body text-center">
-        <h5 class="card-title">Meu Cronograma</h5>
-        <a href="{% url 'app:cronograma' %}" class="btn btn-primary">Visualizar</a>
+      <!-- Cronograma -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm hover-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" 
+               alt="Cronograma" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Meu Cronograma</h5>
+            <button>Visualizar</button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Materiais de Apoio -->
-  <div class="col-md-4">
-    <div class="card hover-card h-100">
-      <img src="{% static 'img/material.png' %}" class="card-img-top" alt="Materiais">
-      <div class="card-body text-center">
-        <h5 class="card-title">Materiais de Apoio</h5>
-        <a href="#materiais" class="btn btn-primary">Ver Materiais</a>
+      <!-- Materiais de Apoio -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm hover-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/3415/3415476.png" 
+               alt="Materiais" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Materiais de Apoio</h5>
+            <button>Ver Materiais</button>
+          </div>
+        </div>
       </div>
+
     </div>
-  </div>
 
-</div>
+    <!-- Dicas de Estudo -->
+    <section class="mt-5 text-start">
+      <h2>📌 Dicas de Estudo</h2>
+      <ul class="list-group mb-4">
+        <li class="list-group-item">Estude em blocos de 25 minutos com intervalos curtos.</li>
+        <li class="list-group-item">Organize seu cronograma semanalmente.</li>
+        <li class="list-group-item">Use técnicas de concentração como Pomodoro.</li>
+        <li class="list-group-item">Mantenha seu ambiente de estudo limpo e silencioso.</li>
+        <li class="list-group-item">Evite distrações digitais durante as sessões.</li>
+      </ul>
+    </section>
 
-<!-- Dicas de Estudo -->
-{% if dicas %}
-<h4 class="mt-5">📌 Dicas de Estudo</h4>
-<ul class="list-group mb-4">
-  {% for dica in dicas %}
-    <li class="list-group-item">{{ dica.texto }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
+    <!-- Materiais de Apoio -->
+    <section id="materiais" class="text-start">
+      <h2>📚 Materiais de Apoio</h2>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Apostila de Matemática
+          <a href="https://example.com/apostila-matematica.pdf" class="btn btn-outline-success btn-sm" target="_blank" rel="noopener">Baixar</a>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Resumos de História
+          <a href="https://example.com/resumos-historia.pdf" class="btn btn-outline-success btn-sm" target="_blank" rel="noopener">Baixar</a>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Exercícios de Química
+          <a href="https://example.com/exercicios-quimica.pdf" class="btn btn-outline-success btn-sm" target="_blank" rel="noopener">Baixar</a>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Guia de Redação ENEM
+          <a href="https://example.com/guia-redacao.pdf" class="btn btn-outline-success btn-sm" target="_blank" rel="noopener">Baixar</a>
+        </li>
+      </ul>
+    </section>
+  </main>
 
-<!-- Materiais de Apoio -->
-{% if materiais %}
-<h4 id="materiais">📚 Materiais de Apoio</h4>
-<ul class="list-group">
-  {% for material in materiais %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <span>{{ material.titulo }}</span>
-      <a href="{{ material.arquivo.url }}" class="btn btn-sm btn-outline-primary" target="_blank">Baixar</a>
-    </li>
-  {% endfor %}
-</ul>
-{% endif %}
-{% endblock %}
+  <footer>
+    &copy; 2025 Foco Total &mdash; Desenvolvido para apoiar seus estudos
+  </footer>
+
+  <!-- Bootstrap JS (opcional, para componentes interativos) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
