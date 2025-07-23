@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
@@ -9,10 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import login
 from django.urls import reverse_lazy
+from django.contrib import messages
+from django.db import IntegrityError
 
 from .models import Recompensa, Pessoa, Cronograma, Dica, MaterialApoio
-from .forms import CronogramaForm
+from .forms import CronogramaForm, DicaForm, MaterialApoioForm, CustomUserCreationForm
 
 
 class IndexView(View):
@@ -121,9 +124,40 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('dashboard')
 
+    def form_invalid(self, form):
+        """Adiciona contexto para formulário inválido"""
+        return super().form_invalid(form)
+
 
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('login')
+
+
+class CustomSignUpView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        form = CustomUserCreationForm()
+        return render(request, 'registration/signup.html', {'form': form})
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save()
+                login(request, user)
+                messages.success(request, 'Conta criada com sucesso! Bem-vindo ao Foco Total!')
+                return redirect('dashboard')
+            except IntegrityError as e:
+                # Se houver erro de integridade, tentar recuperar
+                if 'app_pessoa_user_id_key' in str(e):
+                    messages.error(request, 'Erro interno: perfil de usuário já existe. Tente fazer login.')
+                    return redirect('login')
+                else:
+                    messages.error(request, 'Erro ao criar conta. Tente novamente.')
+        return render(request, 'registration/signup.html', {'form': form})
 
 
 class CentralEstudosView(LoginRequiredMixin, View):
@@ -143,3 +177,99 @@ class CentralEstudosView(LoginRequiredMixin, View):
             'cronogramas': cronogramas,
         }
         return render(request, 'estudo_dashboard.html', context)
+
+
+class EditarCronogramaView(LoginRequiredMixin, View):
+    def get(self, request, cronograma_id):
+        try:
+            pessoa = request.user.pessoa
+        except ObjectDoesNotExist:
+            return redirect('index')
+        
+        cronograma = get_object_or_404(Cronograma, id=cronograma_id, pessoa=pessoa)
+        form = CronogramaForm(instance=cronograma)
+        return render(request, 'editar_cronograma.html', {'form': form, 'cronograma': cronograma})
+
+    def post(self, request, cronograma_id):
+        try:
+            pessoa = request.user.pessoa
+        except ObjectDoesNotExist:
+            return redirect('index')
+        
+        cronograma = get_object_or_404(Cronograma, id=cronograma_id, pessoa=pessoa)
+        form = CronogramaForm(request.POST, instance=cronograma)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cronograma editado com sucesso!')
+            return redirect('cronograma')
+        
+        return render(request, 'editar_cronograma.html', {'form': form, 'cronograma': cronograma})
+
+
+class DeletarCronogramaView(LoginRequiredMixin, View):
+    def post(self, request, cronograma_id):
+        try:
+            pessoa = request.user.pessoa
+        except ObjectDoesNotExist:
+            return redirect('index')
+        
+        cronograma = get_object_or_404(Cronograma, id=cronograma_id, pessoa=pessoa)
+        cronograma.delete()
+        messages.success(request, 'Cronograma deletado com sucesso!')
+        return redirect('cronograma')
+
+
+class ToggleCronogramaConclusaoView(LoginRequiredMixin, View):
+    def post(self, request, cronograma_id):
+        try:
+            pessoa = request.user.pessoa
+        except ObjectDoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Usuário não encontrado.'})
+        
+        cronograma = get_object_or_404(Cronograma, id=cronograma_id, pessoa=pessoa)
+        cronograma.concluido = not cronograma.concluido
+        cronograma.save()
+        
+        # Adicionar pontos quando marcar como concluído
+        if cronograma.concluido:
+            pessoa.pontos += 10  # 10 pontos por cronograma concluído
+            pessoa.save()
+            message = 'Cronograma marcado como concluído! +10 pontos!'
+        else:
+            message = 'Cronograma desmarcado como concluído.'
+        
+        return JsonResponse({
+            'success': True, 
+            'message': message,
+            'concluido': cronograma.concluido,
+            'pontos_atualizados': pessoa.pontos
+        })
+
+
+class CriarDicaView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = DicaForm()
+        return render(request, 'criar_dica.html', {'form': form})
+
+    def post(self, request):
+        form = DicaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Dica de estudo criada com sucesso!')
+            return redirect('estudo_dashboard')
+        return render(request, 'criar_dica.html', {'form': form})
+
+
+class CriarMaterialView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = MaterialApoioForm()
+        return render(request, 'criar_material.html', {'form': form})
+
+    def post(self, request):
+        form = MaterialApoioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Material de apoio criado com sucesso!')
+            return redirect('estudo_dashboard')
+        return render(request, 'criar_material.html', {'form': form})

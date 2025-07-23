@@ -6,4 +6,9 @@ from .models import Pessoa
 @receiver(post_save, sender=User)
 def criar_pessoa_automaticamente(sender, instance, created, **kwargs):
     if created:
-        Pessoa.objects.create(user=instance, nome_completo=instance.username)
+        # Criar perfil Pessoa com nome padrão (será atualizado pelo formulário se necessário)
+        nome_default = instance.get_full_name() or instance.username
+        Pessoa.objects.get_or_create(
+            user=instance,
+            defaults={'nome_completo': nome_default}
+        )

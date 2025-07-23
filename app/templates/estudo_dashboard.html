@@ -1,74 +1,480 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Central de Estudos</title>
+  <title>Foco Total | Central de Estudos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <style>
     body {
-      background-color: #f5f8fa;
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1e1f26, #403f8f);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      overflow-x: hidden;
     }
-    .section-title {
-      margin-top: 50px;
-      margin-bottom: 30px;
-      font-weight: 700;
-      color: #2c3e50;
-      text-align: center;
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
-    .card-custom {
+
+    .navbar-brand {
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: #ffe600;
+      text-shadow: 0 0 10px #fff000;
+    }
+
+    .btn-logout {
+      background: #ffe600;
+      color: #1e1f26;
+      font-weight: bold;
+      border-radius: 25px;
+      padding: 0.5rem 1.4rem;
+      border: none;
+      transition: 0.3s;
+    }
+
+    .btn-logout:hover {
+      background: #fff000;
+      color: #403f8f;
+      box-shadow: 0 0 12px #ffe600;
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: #dcd6ff !important;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
       border-radius: 20px;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 2px;
+      background: #ffe600;
+      border-radius: 1px;
+      box-shadow: 0 0 8px #ffe600;
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .navbar-toggler {
+      border: 1px solid #ffe600;
+      padding: 0.4rem 0.6rem;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffe600' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    @media (max-width: 991px) {
+      .navbar-nav {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+      
+      .nav-link {
+        padding: 0.7rem 1rem;
+        margin: 0.2rem 0;
+      }
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 4rem 0;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .section-title {
+      color: #ffe600;
+      font-weight: 600;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
       height: 100%;
     }
-    .card-custom:hover {
-      transform: scale(1.02);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     }
-    .btn-rounded {
-      border-radius: 30px;
+
+    .glass-card .card-title {
+      color: #ffe600;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
     }
+
+    .glass-card .card-text {
+      color: #dcd6ff;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .glass-card .card-icon {
+      font-size: 3rem;
+      color: #ffe600;
+      margin-bottom: 1rem;
+      text-align: center;
+      display: block;
+    }
+
+    /* Buttons */
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      color: white;
+    }
+
+    .btn-success-glass {
+      background: linear-gradient(45deg, #28a745 0%, #20c997 100%);
+      border: none;
+    }
+
+    .btn-success-glass:hover {
+      background: linear-gradient(45deg, #218838 0%, #1ea085 100%);
+    }
+
+    .btn-info-glass {
+      background: linear-gradient(45deg, #17a2b8 0%, #6f42c1 100%);
+      border: none;
+    }
+
+    .btn-info-glass:hover {
+      background: linear-gradient(45deg, #138496 0%, #5a369a 100%);
+    }
+
+    /* Image styling */
     .img-material {
       max-height: 150px;
       object-fit: cover;
       border-radius: 15px;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: #ffe600;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      color: #ffe600;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      color: #dcd6ff;
+    }
+
+    /* Footer */
+    .glass-footer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .main-content {
+        padding: 1rem 0;
+      }
     }
   </style>
 </head>
 <body>
-
-<div class="container py-5">
-
-  <!-- DICAS DE ESTUDO -->
-  <h2 class="section-title">💡 Dicas de Estudo</h2>
-  <div class="row">
-    {% for dica in dicas %}
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card card-custom bg-info bg-opacity-25 p-3">
-          <h5 class="card-title text-info">{{ dica.titulo }}</h5>
-          <p class="card-text">{{ dica.conteudo }}</p>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg px-4 py-3">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">Foco Total</a>
+    
+    <!-- Toggle button for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}">
+            <i class="fas fa-home"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'cronograma' %}">
+            <i class="fas fa-calendar-check"></i>
+            Cronograma
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'criar_cronograma' %}">
+            <i class="fas fa-plus"></i>
+            Criar Cronograma
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'pomodoro' %}">
+            <i class="fas fa-stopwatch"></i>
+            Pomodoro
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'recompensas' %}">
+            <i class="fas fa-gift"></i>
+            Recompensas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'estudo_dashboard' %}">
+            <i class="fas fa-graduation-cap"></i>
+            Central de Estudos
+          </a>
+        </li>
+      </ul>
+      
+      <div class="ms-auto">
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">Sair</button>
+        </form>
       </div>
-    {% empty %}
-      <p class="text-muted text-center">Sem dicas disponíveis.</p>
-    {% endfor %}
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1><i class="fas fa-graduation-cap me-3"></i>Central de Estudos</h1>
+      <p>Dicas, materiais e cronogramas públicos para potencializar seus estudos</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+
+      <!-- DICAS DE ESTUDO -->
+      <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="section-title mb-0">💡 Dicas de Estudo</h2>
+          <a href="{% url 'criar_dica' %}" class="btn btn-glass btn-success-glass">
+            <i class="fas fa-plus me-2"></i>Adicionar Dica
+          </a>
+        </div>
+        <div class="row">
+          {% for dica in dicas %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="glass-card">
+                <i class="fas fa-lightbulb card-icon"></i>
+                <h5 class="card-title">{{ dica.titulo }}</h5>
+                <p class="card-text">{{ dica.conteudo }}</p>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-12">
+              <div class="empty-state">
+                <i class="fas fa-lightbulb"></i>
+                <h3>Nenhuma dica disponível</h3>
+                <p>Ainda não há dicas de estudo cadastradas no sistema.</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- MATERIAIS DE APOIO -->
+      <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="section-title mb-0">📚 Materiais de Apoio</h2>
+          <a href="{% url 'criar_material' %}" class="btn btn-glass btn-success-glass">
+            <i class="fas fa-plus me-2"></i>Adicionar Material
+          </a>
+        </div>
+        <div class="row">
+          {% for mat in materiais %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="glass-card">
+                <i class="fas fa-book card-icon"></i>
+                {% if mat.imagem %}
+                  <img src="{{ mat.imagem }}" class="img-material" alt="Imagem do material">
+                {% endif %}
+                <h5 class="card-title">{{ mat.titulo }}</h5>
+                <p class="card-text">{{ mat.descricao }}</p>
+                <a href="{{ mat.link }}" target="_blank" class="btn btn-glass btn-success-glass">
+                  <i class="fas fa-external-link-alt me-2"></i>Acessar Material
+                </a>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-12">
+              <div class="empty-state">
+                <i class="fas fa-book"></i>
+                <h3>Nenhum material disponível</h3>
+                <p>Ainda não há materiais de apoio cadastrados no sistema.</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- CRONOGRAMAS PÚBLICOS -->
+      <section class="mb-5">
+        <h2 class="section-title">🌐 Cronogramas Públicos</h2>
+        <div class="row">
+          {% for cronograma in cronogramas %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="glass-card">
+                <i class="fas fa-calendar-check card-icon"></i>
+                <h5 class="card-title">{{ cronograma.titulo }}</h5>
+                <p class="card-text">
+                  <strong>Autor:</strong> {{ cronograma.pessoa.nome_completo }}<br>
+                  <strong>Data:</strong> {{ cronograma.data|date:"d/m/Y" }}<br>
+                  <strong>Horário:</strong> {{ cronograma.hora_inicio|time:"H:i" }} - {{ cronograma.hora_fim|time:"H:i" }}<br>
+                  {% if cronograma.descricao %}
+                    <strong>Descrição:</strong> {{ cronograma.descricao|truncatewords:15 }}
+                  {% endif %}
+                </p>
+                {% if cronograma.concluido %}
+                  <span class="badge bg-success mb-2">Concluído pelo autor</span>
+                {% endif %}
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-12">
+              <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>Nenhum cronograma público disponível</h3>
+                <p>Ainda não há cronogramas públicos compartilhados pela comunidade.</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+    </div>
   </div>
 
-  <!-- MATERIAIS DE APOIO -->
-  <h2 class="section-title">📚 Materiais de Apoio</h2>
-  <div class="row">
-    {% for mat in materiais %}
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card card-custom bg-success bg-opacity-25 p-3">
-          {% if mat.imagem %}
-            <img src="{{ mat.imagem }}" class="img-fluid img-material mb-3" alt="Imagem do material">
-          {% endif %}
-          <h5 class="card-title text-success">{{ mat.titulo }}</h5>
-          <p class="card-text">{{ mat.descricao }}</p>
-          <a href="{{ mat.link }}" target="_blank" class="btn btn-outline-success btn-rounded mt-2">Acessar Material</a>
-        </div>
-      </div>
-    {% empty %}
-      <p class="text-muted text-center">Sem materiais disponíveis.</p>
-    {%
+  <!-- Glass Footer -->
+  <footer class="glass-footer">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Foco Total | Desenvolvido no IFSULDEMINAS - Campus Muzambinho</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -18,6 +18,7 @@ class Cronograma(models.Model):
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField()
     publico = models.BooleanField(default=False)
+    concluido = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.titulo} ({self.data})"
