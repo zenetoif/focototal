@@ -1,0 +1,22 @@
+{
+    "python.defaultInterpreterPath": "./.venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
+    "files.associations": {
+        "*.html": "django-html"
+    },
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "django.snippets.enabled": true,
+    "html.suggest.html5": true,
+    "css.validate": true,
+    "javascript.validate.enable": false,
+    "typescript.validate.enable": false,
+    "[django-html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    }
+}

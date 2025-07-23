@@ -2,50 +2,296 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Central de Estudos</title>
+  <title>Foco Total | Central de Estudos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f5f8fa;
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1e1f26, #403f8f);
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
     }
-    .section-title {
-      margin-top: 50px;
-      margin-bottom: 30px;
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 5rem 0;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      color: #ffe600;
+      text-shadow: 0 0 20px #fff000;
+    }
+
+    .hero p {
+      font-size: 1.4rem;
+      opacity: 0.9;
+      font-weight: 300;
+      margin-bottom: 3rem;
+    }
+
+    .btn-login-access {
+      background: linear-gradient(45deg, #ffe600, #fff000);
+      border: none;
+      color: #1e1f26;
       font-weight: 700;
-      color: #2c3e50;
-    }
-    .card-custom {
-      border-radius: 20px;
+      padding: 1rem 3rem;
+      border-radius: 25px;
+      font-size: 1.2rem;
       transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
     }
-    .card-custom:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    .btn-login-access:hover {
+      background: linear-gradient(45deg, #fff000, #ffe600);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 230, 0, 0.4);
+      color: #1e1f26;
     }
-    .btn-outline-primary {
-      border-radius: 30px;
+
+    /* Main Content */
+    .main-content {
+      padding: 4rem 0;
     }
-    .cronograma-card ul {
-      list-style: none;
-      padding-left: 0;
+
+    .section-title {
+      color: #ffe600;
+      font-weight: 600;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
-    .cronograma-card li::before {
-      content: "📅 ";
+
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .glass-card .card-title {
+      color: #ffe600;
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .glass-card .card-text {
+      color: #dcd6ff;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .glass-card .card-icon {
+      font-size: 3rem;
+      color: #ffe600;
+      margin-bottom: 1rem;
+      text-align: center;
+      display: block;
+    }
+
+    /* Features */
+    .features {
+      padding: 4rem 0;
+    }
+
+    .feature-item {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .feature-icon {
+      font-size: 4rem;
+      color: #ffe600;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 15px #fff000;
+    }
+
+    .feature-title {
+      color: #ffe600;
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-description {
+      color: #dcd6ff;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .glass-footer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .feature-item {
+        margin-bottom: 2rem;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="container py-5">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1><i class="fas fa-bullseye me-3"></i>Foco Total</h1>
+      <p>Sua plataforma completa para estudos focados e produtivos</p>
+      <a href="{% url 'login' %}" class="btn-login-access">
+        <i class="fas fa-sign-in-alt me-2"></i>Acessar Plataforma
+      </a>
+    </div>
+  </section>
 
-  <!-- DICAS -->
-  <h2 class="section-title text-center">💡 Dicas de Estudo</h2>
-  <div class="row">
-    {% for dica in dicas %}
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card card-custom bg-info bg-opacity-25 p-3">
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">🚀 Recursos da Plataforma</h2>
+      <div class="row">
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-item">
+            <i class="fas fa-calendar-check feature-icon"></i>
+            <h3 class="feature-title">Cronogramas Personalizados</h3>
+            <p class="feature-description">Crie e gerencie seus cronogramas de estudo de forma intuitiva e eficiente.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-item">
+            <i class="fas fa-stopwatch feature-icon"></i>
+            <h3 class="feature-title">Técnica Pomodoro</h3>
+            <p class="feature-description">Mantenha o foco com sessões de estudo cronometradas e pausas estratégicas.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-item">
+            <i class="fas fa-gift feature-icon"></i>
+            <h3 class="feature-title">Sistema de Recompensas</h3>
+            <p class="feature-description">Ganhe pontos e recompensas conforme completa seus objetivos de estudo.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-item">
+            <i class="fas fa-graduation-cap feature-icon"></i>
+            <h3 class="feature-title">Central de Estudos</h3>
+            <p class="feature-description">Acesse dicas, materiais e cronogramas compartilhados pela comunidade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Preview -->
+  <section class="main-content">
+    <div class="container">
+
+      <!-- DICAS -->
+      <h2 class="section-title">💡 Dicas de Estudo</h2>
+      <div class="row">
+        {% for dica in dicas %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="glass-card">
+              <i class="fas fa-lightbulb card-icon"></i>
+              <h5 class="card-title">{{ dica.titulo }}</h5>
+              <p class="card-text">{{ dica.conteudo|truncatewords:20 }}</p>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-12">
+            <div class="glass-card text-center">
+              <i class="fas fa-lightbulb card-icon"></i>
+              <h5 class="card-title">Dicas em Breve</h5>
+              <p class="card-text">Em breve você terá acesso a dicas exclusivas de estudo.</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- MATERIAIS -->
+      <h2 class="section-title">📚 Materiais de Apoio</h2>
+      <div class="row">
+        {% for material in materiais %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="glass-card">
+              <i class="fas fa-book card-icon"></i>
+              <h5 class="card-title">{{ material.titulo }}</h5>
+              <p class="card-text">{{ material.descricao|truncatewords:15 }}</p>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-12">
+            <div class="glass-card text-center">
+              <i class="fas fa-book card-icon"></i>
+              <h5 class="card-title">Materiais em Breve</h5>
+              <p class="card-text">Em breve você terá acesso a uma biblioteca completa de materiais de estudo.</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Call to Action -->
+      <div class="text-center mt-5">
+        <h2 class="section-title">Pronto para começar?</h2>
+        <a href="{% url 'login' %}" class="btn-login-access">
+          <i class="fas fa-rocket me-2"></i>Começar Agora
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="glass-footer">
+    <div class="container">
+      <p class="mb-0">&copy; {{ now|date:"Y" }} Foco Total | Desenvolvido no IFSULDEMINAS - Campus Muzambinho</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
           <h5 class="card-title text-info">{{ dica.titulo }}</h5>
           <p class="card-text">{{ dica.conteudo }}</p>
         </div>

@@ -3,63 +3,80 @@
 
 {% block content %}
 <div class="container mt-4 text-center">
-  <h2>Foco Total - Aplicação para apoio à concentração nos estudos</h2>
+  <h2 style="color: #ffe600; font-weight: 700; text-shadow: 0 0 10px #fff000;">
+    <i class="fas fa-bullseye me-3"></i>Foco Total - Aplicação para apoio à concentração nos estudos
+  </h2>
 
   <div class="alert alert-success mt-4">
-    Bem-vindo(a), {{ user.first_name }}!
+    <i class="fas fa-user-check me-2"></i>Bem-vindo(a), {{ user.first_name }}!
   </div>
 
   <div class="row mt-4">
     <div class="col-md-4 mb-3">
-      <div class="card h-100">
+      <div class="glass-card text-center">
         <img src="{% static 'img/pomodoro.png' %}" class="card-img-top" alt="Pomodoro">
         <div class="card-body">
-          <h5 class="card-title">Sessão Pomodoro</h5>
-          <a href="{% url 'pomodoro:listar' %}" class="btn btn-primary">Acessar</a>
+          <h5 class="card-title"><i class="fas fa-stopwatch me-2"></i>Sessão Pomodoro</h5>
+          <a href="{% url 'pomodoro' %}" class="btn btn-primary">
+            <i class="fas fa-play me-2"></i>Acessar
+          </a>
         </div>
       </div>
     </div>
 
     <div class="col-md-4 mb-3">
-      <div class="card h-100">
+      <div class="glass-card text-center">
         <img src="{% static 'img/cronograma.png' %}" class="card-img-top" alt="Cronograma">
         <div class="card-body">
-          <h5 class="card-title">Cronograma</h5>
-          <a href="{% url 'cronograma:listar' %}" class="btn btn-primary">Acessar</a>
+          <h5 class="card-title"><i class="fas fa-calendar-check me-2"></i>Cronograma</h5>
+          <a href="{% url 'cronograma' %}" class="btn btn-primary">
+            <i class="fas fa-calendar me-2"></i>Acessar
+          </a>
         </div>
       </div>
     </div>
-
-    <div class="col-md-4 mb-3">
-      <div class="card h-100">
-        <img src="{% static 'img/tarefas.png' %}" class="card-img-top" alt="Tarefas">
-        <div class="card-body">
-          <h5 class="card-title">Minhas Tarefas</h5>
-          <a href="{% url 'tarefas:listar' %}" class="btn btn-primary">Acessar</a>
-        </div>
-      </div>
     </div>
 
     <div class="col-md-4 mb-3">
-      <div class="card h-100">
+      <div class="glass-card text-center">
         <img src="{% static 'img/recompensas.png' %}" class="card-img-top" alt="Recompensas">
         <div class="card-body">
-          <h5 class="card-title">Recompensas</h5>
-          <a href="{% url 'recompensas:listar' %}" class="btn btn-primary">Ver Prêmios</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-      <div class="card h-100">
-        <img src="{% static 'img/bloqueio.png' %}" class="card-img-top" alt="Bloqueio">
-        <div class="card-body">
-          <h5 class="card-title">Bloqueio de Notificações</h5>
-          <a href="{% url 'bloqueio:listar' %}" class="btn btn-primary">Gerenciar</a>
+          <h5 class="card-title"><i class="fas fa-gift me-2"></i>Recompensas</h5>
+          <a href="{% url 'recompensas' %}" class="btn btn-primary">
+            <i class="fas fa-trophy me-2"></i>Ver Prêmios
+          </a>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6 mb-3">
+      <div class="glass-card text-center">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-graduation-cap me-2"></i>Central de Estudos</h5>
+          <p class="card-text">Acesse dicas, materiais e cronogramas públicos da comunidade.</p>
+          <a href="{% url 'estudo_dashboard' %}" class="btn btn-primary">
+            <i class="fas fa-book me-2"></i>Explorar
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="glass-card text-center">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-plus me-2"></i>Criar Cronograma</h5>
+          <p class="card-text">Organize seus estudos com cronogramas personalizados.</p>
+          <a href="{% url 'criar_cronograma' %}" class="btn btn-primary">
+            <i class="fas fa-calendar-plus me-2"></i>Criar Agora
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
   <footer class="mt-5">
     <p class="text-muted">Desenvolvido por Zé Neto - IFSULDEMINAS</p>

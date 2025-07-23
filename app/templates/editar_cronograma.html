@@ -1,0 +1,442 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Foco Total | Editar Cronograma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1e1f26, #403f8f);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .navbar-brand {
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: #ffe600;
+      text-shadow: 0 0 10px #fff000;
+    }
+
+    .btn-logout {
+      background: #ffe600;
+      color: #1e1f26;
+      font-weight: bold;
+      border-radius: 25px;
+      padding: 0.5rem 1.4rem;
+      border: none;
+      transition: 0.3s;
+    }
+
+    .btn-logout:hover {
+      background: #fff000;
+      color: #403f8f;
+      box-shadow: 0 0 12px #ffe600;
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: #dcd6ff !important;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 2px;
+      background: #ffe600;
+      border-radius: 1px;
+      box-shadow: 0 0 8px #ffe600;
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .navbar-toggler {
+      border: 1px solid #ffe600;
+      padding: 0.4rem 0.6rem;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffe600' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    @media (max-width: 991px) {
+      .navbar-nav {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+      
+      .nav-link {
+        padding: 0.7rem 1rem;
+        margin: 0.2rem 0;
+      }
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .glass-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .form-label {
+      color: white;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      color: white;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+      color: white;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      color: white;
+    }
+
+    .btn-primary-glass {
+      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+      border: none;
+    }
+
+    .btn-primary-glass:hover {
+      background: linear-gradient(45deg, #43a3f5 0%, #00d9fe 100%);
+    }
+
+    .btn-secondary-glass {
+      background: rgba(108, 117, 125, 0.3);
+      border: 1px solid rgba(108, 117, 125, 0.5);
+    }
+
+    .btn-secondary-glass:hover {
+      background: rgba(108, 117, 125, 0.5);
+    }
+
+    /* Footer */
+    .glass-footer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: auto;
+    }
+
+    /* Messages */
+    .alert {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .glass-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .main-content {
+        padding: 1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg px-4 py-3">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">Foco Total</a>
+    
+    <!-- Toggle button for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}">
+            <i class="fas fa-home"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'cronograma' %}">
+            <i class="fas fa-calendar-check"></i>
+            Cronograma
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'criar_cronograma' %}">
+            <i class="fas fa-plus"></i>
+            Criar Cronograma
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'pomodoro' %}">
+            <i class="fas fa-stopwatch"></i>
+            Pomodoro
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'recompensas' %}">
+            <i class="fas fa-gift"></i>
+            Recompensas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'estudo_dashboard' %}">
+            <i class="fas fa-graduation-cap"></i>
+            Central de Estudos
+          </a>
+        </li>
+      </ul>
+      
+      <div class="ms-auto">
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">Sair</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      
+      <!-- Messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="glass-container">
+        <h1 class="page-title">
+          <i class="fas fa-edit me-2"></i>
+          Editar Cronograma
+        </h1>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.titulo.id_for_label }}" class="form-label">
+                <i class="fas fa-heading me-1"></i>{{ form.titulo.label }}
+              </label>
+              {{ form.titulo }}
+              {% if form.titulo.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.titulo.errors %}
+                    <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.data.id_for_label }}" class="form-label">
+                <i class="fas fa-calendar me-1"></i>{{ form.data.label }}
+              </label>
+              {{ form.data }}
+              {% if form.data.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.data.errors %}
+                    <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.hora_inicio.id_for_label }}" class="form-label">
+                <i class="fas fa-clock me-1"></i>{{ form.hora_inicio.label }}
+              </label>
+              {{ form.hora_inicio }}
+              {% if form.hora_inicio.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.hora_inicio.errors %}
+                    <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.hora_fim.id_for_label }}" class="form-label">
+                <i class="fas fa-clock me-1"></i>{{ form.hora_fim.label }}
+              </label>
+              {{ form.hora_fim }}
+              {% if form.hora_fim.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.hora_fim.errors %}
+                    <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.descricao.id_for_label }}" class="form-label">
+              <i class="fas fa-align-left me-1"></i>{{ form.descricao.label }}
+            </label>
+            {{ form.descricao }}
+            {% if form.descricao.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.descricao.errors %}
+                  <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check">
+              {{ form.publico }}
+              <label class="form-check-label text-white" for="{{ form.publico.id_for_label }}">
+                <i class="fas fa-globe me-1"></i>{{ form.publico.label }}
+              </label>
+            </div>
+            {% if form.publico.errors %}
+              <div class="text-danger small mt-1">
+                {% for error in form.publico.errors %}
+                  <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="d-flex gap-3 justify-content-center">
+            <button type="submit" class="btn btn-glass btn-primary-glass">
+              <i class="fas fa-save me-2"></i>Salvar Alterações
+            </button>
+            <a href="{% url 'cronograma' %}" class="btn btn-glass btn-secondary-glass">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Glass Footer -->
+  <footer class="glass-footer">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Foco Total | Desenvolvido no IFSULDEMINAS - Campus Muzambinho</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

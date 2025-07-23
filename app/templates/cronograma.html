@@ -1,131 +1,552 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Cronograma de Estudos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Ícones -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <title>Foco Total | Cronograma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Estilo personalizado -->
+
   <style>
     body {
-      background-color: black;
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1e1f26, #403f8f);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .navbar-brand {
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: #ffe600;
+      text-shadow: 0 0 10px #fff000;
+    }
+
+    .btn-logout {
+      background: #ffe600;
+      color: #1e1f26;
+      font-weight: bold;
+      border-radius: 25px;
+      padding: 0.5rem 1.4rem;
+      border: none;
+      transition: 0.3s;
+    }
+
+    .btn-logout:hover {
+      background: #fff000;
+      color: #403f8f;
+      box-shadow: 0 0 12px #ffe600;
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: #dcd6ff !important;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 2px;
+      background: #ffe600;
+      border-radius: 1px;
+      box-shadow: 0 0 8px #ffe600;
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .navbar-toggler {
+      border: 1px solid #ffe600;
+      padding: 0.4rem 0.6rem;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffe600' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    @media (max-width: 991px) {
+      .navbar-nav {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+      
+      .nav-link {
+        padding: 0.7rem 1rem;
+        margin: 0.2rem 0;
+      }
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: #dcd6ff !important;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link:hover {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+      color: #ffe600 !important;
+      background: rgba(255, 230, 0, 0.15);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .navbar-toggler {
+      border: 1px solid #ffe600;
+      padding: 0.4rem 0.6rem;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffe600' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
 
     .hero {
-      background-image: url('{% static "images/estudos.jpg" %}');
-      background-size: cover;
-      background-position: center;
-      color: white;
-      padding: 80px 0;
+      padding: 5rem 2rem 2rem;
       text-align: center;
     }
 
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #ffe600;
+      text-shadow: 0 0 15px #00000099;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: #dcd6ff;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ffe600;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(255, 230, 0, 0.3);
+    }
+
     .card-cronograma {
-      transition: transform 0.3s ease-in-out;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
     }
 
     .card-cronograma:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    }
+
+    .card-cronograma img {
+      border-radius: 15px;
+      margin-bottom: 1rem;
+    }
+
+    .card-cronograma .card-title {
+      color: #ffe600;
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-cronograma .card-text {
+      color: #dcd6ff;
+      line-height: 1.6;
+    }
+
+    .chart-container {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 3rem;
+    }
+
+    .dicas-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 4rem 0;
+      margin: 3rem 0;
+    }
+
+    .dica-card {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease;
+      height: 100%;
+    }
+
+    .dica-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .dica-card i {
+      font-size: 3rem;
+      color: #ffe600;
+      margin-bottom: 1rem;
+    }
+
+    .dica-card h5 {
+      color: #ffe600;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .dica-card p {
+      color: #dcd6ff;
+      line-height: 1.6;
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: #ffe600 !important;
+      box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25) !important;
+      color: white !important;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.6) !important;
     }
 
     footer {
-      background-color: #343a40;
-      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: auto;
+    }
+
+    /* Responsividade */
+    @media (max-width: 991px) {
+      .navbar-nav {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+      
+      .nav-link {
+        padding: 0.7rem 1rem;
+        margin: 0.2rem 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero {
+        padding: 3rem 1rem 2rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Foco Total</a>
+<nav class="navbar navbar-expand-lg px-4 py-3">
+  <a class="navbar-brand" href="{% url 'dashboard' %}">Foco Total</a>
+  
+  <!-- Toggle button for mobile -->
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'dashboard' %}">
+          <i class="fas fa-home"></i>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'cronograma' %}">
+          <i class="fas fa-calendar-check"></i>
+          Cronograma
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'criar_cronograma' %}">
+          <i class="fas fa-plus"></i>
+          Criar Cronograma
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'pomodoro' %}">
+          <i class="fas fa-stopwatch"></i>
+          Pomodoro
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'recompensas' %}">
+          <i class="fas fa-gift"></i>
+          Recompensas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'estudo_dashboard' %}">
+          <i class="fas fa-graduation-cap"></i>
+          Central de Estudos
+        </a>
+      </li>
+    </ul>
+    
+    <div class="ms-auto">
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-logout">Sair</button>
+      </form>
+    </div>
   </div>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
   <div class="container">
-    <h1 class="display-4">Organize seus Estudos com Eficiência</h1>
-    <p class="lead">Acompanhe seu progresso com um cronograma visual e prático</p>
+    <h1>📅 Organize seus Estudos com Eficiência</h1>
+    <p>Acompanhe seu progresso com cronogramas visuais e práticos</p>
   </div>
 </section>
 
 <!-- Cronogramas -->
 <section class="container py-5">
-  <h2 class="mb-4 text-center">📅 Meus Cronogramas</h2>
+  <h2 class="section-title">📅 Meus Cronogramas</h2>
+  
+  <!-- Filtros de busca -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card" style="background: rgba(255, 255, 255, 0.08); border-radius: 15px; padding: 1.5rem; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
+        <form method="GET" class="row g-3">
+          <div class="col-md-6">
+            <label for="titulo" class="form-label" style="color: #ffe600; font-weight: 600;">Buscar por título:</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" value="{{ request.GET.titulo }}" placeholder="Digite o título do cronograma" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 10px;">
+          </div>
+          <div class="col-md-4">
+            <label for="data" class="form-label" style="color: #ffe600; font-weight: 600;">Filtrar por data:</label>
+            <input type="date" class="form-control" id="data" name="data" value="{{ request.GET.data }}" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 10px;">
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn w-100" style="background: #ffe600; color: #1e1f26; font-weight: 700; border-radius: 10px;">
+              <i class="fas fa-search"></i> Buscar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Botão para criar novo cronograma -->
+  <div class="text-center mb-4">
+    <a href="{% url 'criar_cronograma' %}" class="btn" style="background: #ffe600; color: #1e1f26; font-weight: 700; padding: 0.75rem 2rem; border-radius: 25px; text-decoration: none; transition: all 0.3s ease;">
+      <i class="fas fa-plus"></i> Criar Novo Cronograma
+    </a>
+  </div>
+
   <div class="row g-4">
-    <div class="col-md-4">
-      <div class="card card-cronograma">
-        <img src="https://resacademy.com.br/wp-content/uploads/2024/10/cronograma-de-estudos-_20240905_145755_0000-pdf.jpg" class="card-img-top" alt="Estudo de Manhã">
-        <div class="card-body">
-          <h5 class="card-title">Rotina Matinal</h5>
-          <p class="card-text">8h - Matemática<br>9h - Redação<br>10h - Intervalo<br>10h30 - Química</p>
+    {% for cronograma in cronogramas %}
+      <div class="col-md-4">
+        <div class="card card-cronograma">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="card-title">{{ cronograma.titulo }}</h5>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="cronograma{{ cronograma.id }}" 
+                       {% if cronograma.concluido %}checked{% endif %}
+                       onchange="toggleConclusao({{ cronograma.id }}, this);">
+                <label class="form-check-label text-white" for="cronograma{{ cronograma.id }}">
+                  {% if cronograma.concluido %}
+                    <i class="fas fa-check text-success"></i>
+                  {% endif %}
+                </label>
+              </div>
+            </div>
+            <p class="card-text">
+              <strong>Data:</strong> {{ cronograma.data|date:"d/m/Y" }}<br>
+              <strong>Horário:</strong> {{ cronograma.hora_inicio|time:"H:i" }} - {{ cronograma.hora_fim|time:"H:i" }}<br>
+              {% if cronograma.descricao %}
+                <strong>Descrição:</strong> {{ cronograma.descricao|truncatewords:10 }}
+              {% endif %}
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                {% if cronograma.publico %}
+                  <span class="badge" style="background: #ffe600; color: #1e1f26;">Público</span>
+                {% else %}
+                  <span class="badge" style="background: rgba(255,255,255,0.2); color: #dcd6ff;">Privado</span>
+                {% endif %}
+                {% if cronograma.concluido %}
+                  <span class="badge bg-success ms-1">Concluído</span>
+                {% endif %}
+              </div>
+              <div class="btn-group" role="group">
+                <a href="{% url 'editar_cronograma' cronograma.id %}" 
+                   class="btn btn-sm" 
+                   style="background: rgba(255, 255, 255, 0.2); color: white; border: none; border-radius: 5px 0 0 5px;"
+                   title="Editar">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <button type="button" 
+                        class="btn btn-sm" 
+                        style="background: rgba(220, 53, 69, 0.8); color: white; border: none; border-radius: 0 5px 5px 0;"
+                        onclick="confirmarDelecao({{ cronograma.id }}, '{{ cronograma.titulo }}');"
+                        title="Deletar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-cronograma">
-        <img src="https://static.todamateria.com.br/upload/cr/on/cronogramadeestudosmodelopreenchidodomingoasabado-cke.jpg" class="card-img-top" alt="Estudo de Tarde">
-        <div class="card-body">
-          <h5 class="card-title">Rotina da Tarde</h5>
-          <p class="card-text">14h - Física<br>15h - Inglês<br>16h - Intervalo<br>16h30 - Geografia</p>
+    {% empty %}
+      <div class="col-12">
+        <div class="text-center" style="background: rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 3rem; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
+          <i class="fas fa-calendar-plus" style="font-size: 4rem; color: #ffe600; margin-bottom: 1rem;"></i>
+          <h3 style="color: #ffe600; margin-bottom: 1rem;">Nenhum cronograma encontrado</h3>
+          <p style="color: #dcd6ff; margin-bottom: 2rem;">Você ainda não criou nenhum cronograma. Que tal começar agora?</p>
+          <a href="{% url 'criar_cronograma' %}" class="btn" style="background: #ffe600; color: #1e1f26; font-weight: 700; padding: 0.75rem 2rem; border-radius: 25px; text-decoration: none;">
+            <i class="fas fa-plus"></i> Criar Meu Primeiro Cronograma
+          </a>
         </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-cronograma">
-        <img src="https://s3.static.brasilescola.uol.com.br/img/2019/02/cronograma-de-estudos-marcelo.jpg" class="card-img-top" alt="Estudo à Noite">
-        <div class="card-body">
-          <h5 class="card-title">Estudos Noturnos</h5>
-          <p class="card-text">19h - Revisão ENEM<br>20h - Simulado<br>21h - Leitura Leve</p>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </section>
 
 <!-- Gráfico -->
 <section class="container mb-5">
-  <h2 class="text-center mb-4">📊 Progresso Semanal</h2>
-  <canvas id="graficoProgresso" height="100"></canvas>
+  <h2 class="section-title">📊 Progresso Semanal</h2>
+  <div class="chart-container">
+    <canvas id="graficoProgresso" height="100"></canvas>
+  </div>
 </section>
 
 <!-- Dicas -->
-<section class="bg-light py-5">
+<section class="dicas-section">
   <div class="container">
-    <h2 class="text-center mb-4">💡 Dicas para Estudar Melhor</h2>
-    <div class="row text-center">
+    <h2 class="section-title">💡 Dicas para Estudar Melhor</h2>
+    <div class="row g-4">
       <div class="col-md-4">
-        <i class="bi bi-alarm display-4 text-primary"></i>
-        <h5 class="mt-2">Use o Método Pomodoro</h5>
-        <p>25 minutos de foco + 5 de pausa. Repita 4x e faça uma pausa maior.</p>
+        <div class="dica-card">
+          <i class="fas fa-clock"></i>
+          <h5>Use o Método Pomodoro</h5>
+          <p>25 minutos de foco + 5 de pausa. Repita 4x e faça uma pausa maior.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-journal-check display-4 text-success"></i>
-        <h5 class="mt-2">Planeje sua Semana</h5>
-        <p>Organize os estudos de forma equilibrada, intercalando disciplinas.</p>
+        <div class="dica-card">
+          <i class="fas fa-calendar-alt"></i>
+          <h5>Planeje sua Semana</h5>
+          <p>Organize os estudos de forma equilibrada, intercalando disciplinas.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-moon-stars display-4 text-warning"></i>
-        <h5 class="mt-2">Durma Bem</h5>
-        <p>Uma boa noite de sono potencializa a memória e o raciocínio.</p>
+        <div class="dica-card">
+          <i class="fas fa-bed"></i>
+          <h5>Durma Bem</h5>
+          <p>Uma boa noite de sono potencializa a memória e o raciocínio.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Rodapé -->
-<footer class="text-center py-3">
-  <p class="mb-0">&copy; 2025 Foco Total • Sistema de Apoio aos Estudos</p>
+<!-- Footer -->
+<footer>
+  © 2025 Foco Total | Desenvolvido no IFSULDEMINAS - Campus Muzambinho
 </footer>
 
 <!-- Scripts -->
@@ -138,23 +559,149 @@
       datasets: [{
         label: 'Horas de Estudo',
         data: [2, 3, 1.5, 4, 2.5, 0, 3],
-        backgroundColor: '#0d6efd'
+        backgroundColor: '#ffe600',
+        borderColor: '#fff000',
+        borderWidth: 2,
+        borderRadius: 8,
       }]
     },
     options: {
       responsive: true,
       plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: {
-          label: ctx => `${ctx.parsed.y} horas`
-        }}
+        legend: { 
+          display: false 
+        },
+        tooltip: { 
+          callbacks: {
+            label: ctx => `${ctx.parsed.y} horas`
+          },
+          backgroundColor: 'rgba(30, 31, 38, 0.9)',
+          titleColor: '#ffe600',
+          bodyColor: '#dcd6ff',
+          borderColor: '#ffe600',
+          borderWidth: 1
+        }
       },
       scales: {
-        y: { beginAtZero: true }
+        y: { 
+          beginAtZero: true,
+          ticks: {
+            color: '#dcd6ff'
+          },
+          grid: {
+            color: 'rgba(255, 230, 0, 0.1)'
+          }
+        },
+        x: {
+          ticks: {
+            color: '#dcd6ff'
+          },
+          grid: {
+            color: 'rgba(255, 230, 0, 0.1)'
+          }
+        }
       }
     }
   });
+
+  // Função para marcar/desmarcar como concluído
+  function toggleConclusao(cronogramaId, checkbox) {
+    fetch(`/toggle_cronograma/${cronogramaId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Atualizar a interface
+        const card = checkbox.closest('.card');
+        const badgeContainer = card.querySelector('.badge').parentElement;
+        const label = checkbox.nextElementSibling;
+        
+        if (data.concluido) {
+          label.innerHTML = '<i class="fas fa-check text-success"></i>';
+          if (!badgeContainer.querySelector('.bg-success')) {
+            const concluidoBadge = document.createElement('span');
+            concluidoBadge.className = 'badge bg-success ms-1';
+            concluidoBadge.textContent = 'Concluído';
+            badgeContainer.appendChild(concluidoBadge);
+          }
+        } else {
+          label.innerHTML = '';
+          const concluidoBadge = badgeContainer.querySelector('.bg-success');
+          if (concluidoBadge) {
+            concluidoBadge.remove();
+          }
+        }
+        
+        // Mostrar mensagem de sucesso
+        showMessage(data.message, 'success');
+      } else {
+        // Reverter checkbox em caso de erro
+        checkbox.checked = !checkbox.checked;
+        showMessage(data.message, 'error');
+      }
+    })
+    .catch(error => {
+      // Reverter checkbox em caso de erro
+      checkbox.checked = !checkbox.checked;
+      showMessage('Erro ao atualizar cronograma.', 'error');
+    });
+  }
+
+  // Função para confirmar deleção
+  function confirmarDelecao(cronogramaId, titulo) {
+    if (confirm(`Tem certeza que deseja deletar o cronograma "${titulo}"?`)) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = `/deletar_cronograma/${cronogramaId}/`;
+      
+      const csrfToken = document.createElement('input');
+      csrfToken.type = 'hidden';
+      csrfToken.name = 'csrfmiddlewaretoken';
+      csrfToken.value = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      
+      form.appendChild(csrfToken);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+
+  // Função para mostrar mensagens
+  function showMessage(message, type) {
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const alertHtml = `
+      <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); color: white;">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', alertHtml);
+    
+    // Remover após 5 segundos
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) {
+        alert.remove();
+      }
+    }, 5000);
+  }
+
+  // Adicionar token CSRF se não existir
+  if (!document.querySelector('[name=csrfmiddlewaretoken]')) {
+    const csrfToken = document.createElement('input');
+    csrfToken.type = 'hidden';
+    csrfToken.name = 'csrfmiddlewaretoken';
+    csrfToken.value = '{{ csrf_token }}';
+    document.body.appendChild(csrfToken);
+  }
 </script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
