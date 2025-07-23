@@ -1,11 +1,8 @@
 from django.urls import path
 from .views import (
-    CustomLoginView, CustomLogoutView,
-    DashboardView, PomodoroView,
-    CronogramaView, CriarCronogramaView,
-    RecompensasView,
-    IndexView,
-    CentralEstudosView,  # NOVO IMPORT
+    IndexView, CustomLoginView, CustomLogoutView,
+    DashboardView, PomodoroView, CronogramaView, CriarCronogramaView,
+    RecompensasView, resgatar_recompensa, CentralEstudosView,
 )
 
 urlpatterns = [
@@ -17,5 +14,6 @@ urlpatterns = [
     path('cronograma/criar/', CriarCronogramaView.as_view(), name='criar_cronograma'),
     path('pomodoro/', PomodoroView.as_view(), name='pomodoro'),
     path('recompensas/', RecompensasView.as_view(), name='recompensas'),
-    path('estudo/', CentralEstudosView.as_view(), name='estudo_dashboard'),  # NOVA ROTA
+    path('resgatar-recompensa/', resgatar_recompensa, name='resgatar_recompensa'),
+    path('estudo/', CentralEstudosView.as_view(), name='estudo_dashboard'),
 ]

@@ -1,12 +1,17 @@
+import json
 from django.shortcuts import render, redirect
 from django.views import View
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import TemplateView, ListView
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
 
-from .models import Dica, Cronograma, MaterialApoio, Pessoa, Recompensa
+from .models import Recompensa, Pessoa, Cronograma, Dica, MaterialApoio
 from .forms import CronogramaForm
 
 
@@ -33,7 +38,6 @@ class CronogramaView(LoginRequiredMixin, View):
 
         cronogramas = Cronograma.objects.filter(pessoa=pessoa)
 
-        # Filtros do formulário GET
         data = request.GET.get('data')
         titulo = request.GET.get('titulo')
 
@@ -76,6 +80,38 @@ class RecompensasView(LoginRequiredMixin, ListView):
             return Recompensa.objects.filter(pessoa=pessoa)
         except ObjectDoesNotExist:
             return Recompensa.objects.none()
+
+
+@method_decorator(login_required, name='dispatch')
+@csrf_exempt
+def resgatar_recompensa(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            recompensa_id = data.get('recompensa_id')
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({'success': False, 'message': 'Dados inválidos.'})
+
+        try:
+            recompensa = Recompensa.objects.get(id=recompensa_id, pessoa=request.user.pessoa)
+            pessoa = request.user.pessoa
+        except Recompensa.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Recompensa não encontrada.'})
+
+        custo = recompensa.pontos_custo
+
+        if pessoa.pontos < custo:
+            return JsonResponse({'success': False, 'message': 'Você não tem pontos suficientes para resgatar.'})
+
+        pessoa.pontos -= custo
+        pessoa.save()
+
+        recompensa.resgatada = True
+        recompensa.save()
+
+        return JsonResponse({'success': True, 'message': 'Recompensa resgatada com sucesso!', 'pontos_atualizados': pessoa.pontos})
+
+    return JsonResponse({'success': False, 'message': 'Método inválido.'})
 
 
 class CustomLoginView(LoginView):

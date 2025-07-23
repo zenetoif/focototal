@@ -65,7 +65,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'focototal2025h',
         'USER': 'postgres',
-        'PASSWORD': 'senha123',
+        'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -2,120 +2,159 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Meu Cronograma de Estudos</title>
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #f7f9fc;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .header {
-            background: #004d40;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 5px solid #26a69a;
-        }
-        .card {
-            border: none;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .card-title {
-            color: #00796b;
-            font-weight: bold;
-        }
-        .filter-bar {
-            margin: 20px 0;
-            padding: 15px;
-            background: #e0f2f1;
-            border-radius: 10px;
-        }
-        .footer {
-            background: #004d40;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Cronograma de Estudos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Ícones -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Estilo personalizado -->
+  <style>
+    body {
+      background-color: black;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero {
+      background-image: url('{% static "images/estudos.jpg" %}');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .card-cronograma {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .card-cronograma:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>📚 Meu Cronograma de Estudos</h1>
-    <p>Organize seu tempo, mantenha o foco e alcance seus objetivos!</p>
-</div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Foco Total</a>
+  </div>
+</nav>
 
-<div class="container mt-4">
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1 class="display-4">Organize seus Estudos com Eficiência</h1>
+    <p class="lead">Acompanhe seu progresso com um cronograma visual e prático</p>
+  </div>
+</section>
 
-    <div class="filter-bar">
-        <form method="get">
-            <div class="row">
-                <div class="col-md-4">
-                    <input type="date" name="data" class="form-control" placeholder="Filtrar por data">
-                </div>
-                <div class="col-md-4">
-                    <input type="text" name="titulo" class="form-control" placeholder="Filtrar por título">
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-success w-100">Filtrar</button>
-                </div>
-            </div>
-        </form>
+<!-- Cronogramas -->
+<section class="container py-5">
+  <h2 class="mb-4 text-center">📅 Meus Cronogramas</h2>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card card-cronograma">
+        <img src="https://resacademy.com.br/wp-content/uploads/2024/10/cronograma-de-estudos-_20240905_145755_0000-pdf.jpg" class="card-img-top" alt="Estudo de Manhã">
+        <div class="card-body">
+          <h5 class="card-title">Rotina Matinal</h5>
+          <p class="card-text">8h - Matemática<br>9h - Redação<br>10h - Intervalo<br>10h30 - Química</p>
+        </div>
+      </div>
     </div>
-
-    {% if cronogramas %}
-        {% for item in cronogramas %}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ item.titulo }}</h5>
-                <p class="card-text">
-                    <strong>Data:</strong> {{ item.data|date:"d/m/Y" }}<br>
-                    <strong>Horário:</strong> {{ item.hora_inicio }} - {{ item.hora_fim }}<br>
-                    <strong>Descrição:</strong> {{ item.descricao }}
-                </p>
-            </div>
+    <div class="col-md-4">
+      <div class="card card-cronograma">
+        <img src="https://static.todamateria.com.br/upload/cr/on/cronogramadeestudosmodelopreenchidodomingoasabado-cke.jpg" class="card-img-top" alt="Estudo de Tarde">
+        <div class="card-body">
+          <h5 class="card-title">Rotina da Tarde</h5>
+          <p class="card-text">14h - Física<br>15h - Inglês<br>16h - Intervalo<br>16h30 - Geografia</p>
         </div>
-        {% endfor %}
-    {% else %}
-        <div class="alert alert-warning text-center">
-            Nenhum cronograma encontrado. Que tal criar um novo?
-        </div>
-    {% endif %}
-
-    <div class="text-center mt-4">
-        <a href="{% url 'criar_cronograma' %}" class="btn btn-primary">➕ Criar Novo Cronograma</a>
+      </div>
     </div>
-
-    <hr class="my-4">
-
-    <div class="row">
-        <div class="col-md-6">
-            <h4>💡 Dicas de Organização</h4>
-            <ul>
-                <li>Estude em blocos de 25min com pausas de 5min (Técnica Pomodoro).</li>
-                <li>Evite multitarefas, foque em uma atividade por vez.</li>
-                <li>Comece pelo conteúdo mais difícil do dia.</li>
-            </ul>
+    <div class="col-md-4">
+      <div class="card card-cronograma">
+        <img src="https://s3.static.brasilescola.uol.com.br/img/2019/02/cronograma-de-estudos-marcelo.jpg" class="card-img-top" alt="Estudo à Noite">
+        <div class="card-body">
+          <h5 class="card-title">Estudos Noturnos</h5>
+          <p class="card-text">19h - Revisão ENEM<br>20h - Simulado<br>21h - Leitura Leve</p>
         </div>
-        <div class="col-md-6">
-            <h4>📅 Modelos de Cronograma</h4>
-            <ul>
-                <li><strong>Modelo ENEM:</strong> 4h/dia divididas entre áreas do conhecimento.</li>
-                <li><strong>Modelo Técnico:</strong> 2h práticas + 2h teoria por dia.</li>
-                <li><strong>Modelo Light:</strong> 1h por dia com foco em revisão.</li>
-            </ul>
-        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-</div>
+<!-- Gráfico -->
+<section class="container mb-5">
+  <h2 class="text-center mb-4">📊 Progresso Semanal</h2>
+  <canvas id="graficoProgresso" height="100"></canvas>
+</section>
 
-<div class="footer mt-5">
-    <p>&copy; 2025 Foco Total. Desenvolvido para estudantes do IFSULDEMINAS – Campus Muzambinho.</p>
-</div>
+<!-- Dicas -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">💡 Dicas para Estudar Melhor</h2>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <i class="bi bi-alarm display-4 text-primary"></i>
+        <h5 class="mt-2">Use o Método Pomodoro</h5>
+        <p>25 minutos de foco + 5 de pausa. Repita 4x e faça uma pausa maior.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-journal-check display-4 text-success"></i>
+        <h5 class="mt-2">Planeje sua Semana</h5>
+        <p>Organize os estudos de forma equilibrada, intercalando disciplinas.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-moon-stars display-4 text-warning"></i>
+        <h5 class="mt-2">Durma Bem</h5>
+        <p>Uma boa noite de sono potencializa a memória e o raciocínio.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Rodapé -->
+<footer class="text-center py-3">
+  <p class="mb-0">&copy; 2025 Foco Total • Sistema de Apoio aos Estudos</p>
+</footer>
+
+<!-- Scripts -->
+<script>
+  const ctx = document.getElementById('graficoProgresso').getContext('2d');
+  const graficoProgresso = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+      datasets: [{
+        label: 'Horas de Estudo',
+        data: [2, 3, 1.5, 4, 2.5, 0, 3],
+        backgroundColor: '#0d6efd'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: {
+          label: ctx => `${ctx.parsed.y} horas`
+        }}
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
 </body>
 </html>

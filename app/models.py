@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Pessoa(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nome_completo = models.CharField(max_length=100)
+    pontos = models.IntegerField(default=0)  # Pontos para gamificação
 
     def __str__(self):
         return self.nome_completo
@@ -12,10 +13,11 @@ class Pessoa(models.Model):
 class Cronograma(models.Model):
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, null=True, blank=True)
     titulo = models.CharField(max_length=100)
+    descricao = models.TextField(blank=True)
     data = models.DateField()
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField()
-    publico = models.BooleanField(default=False)  # NOVO CAMPO
+    publico = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.titulo} ({self.data})"
@@ -36,7 +38,9 @@ class Recompensa(models.Model):
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
     descricao = models.TextField(blank=True)
+    pontos_custo = models.IntegerField(default=10)  # Pontos necessários para resgatar
     data_obtida = models.DateField(auto_now_add=True)
+    resgatada = models.BooleanField(default=False)
 
     def __str__(self):
         return self.titulo
